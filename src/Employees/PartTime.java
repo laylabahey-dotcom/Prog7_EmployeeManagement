@@ -1,13 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package Employees;
 
-/**
- *
- * @author layla-bahey
- */
+
 public class PartTime extends Employee{
     public String type = "Part-time Employee";
     private int workhours;
@@ -23,21 +17,27 @@ public class PartTime extends Employee{
         
     }
     
+    public void setWorkHours(int workHours) {
+        if (workHours < 0 || workHours > 744) { // Max hours in a 31-day month
+            throw new IllegalArgumentException("Work hours must be between 0 and 744.");
+        }
+        this.workhours = workHours;
+    }
+
+    public void setPayPerHour(double payPerHour) {
+        if (payPerHour < 0) {
+            throw new IllegalArgumentException("Pay per hour cannot be negative.");
+        }
+        this.payPerHour = payPerHour;
+    }
+
     public int getWorkHours() { return workhours; }
-    public void setWorkHours(int workHours) { this.workhours = workHours; }
-
     public double getPayPerHour() { return payPerHour; }
-    public void setPayPerHour(double payPerHour) { this.payPerHour = payPerHour; }
-
     
     @Override
     public double calculateMonthly() {
         return this.payPerHour * this.workhours;
     }
-
-    
-    
-    
-    
+   
     
 }

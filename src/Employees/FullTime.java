@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package Employees;
 
 public class FullTime extends Employee{
@@ -17,12 +14,24 @@ public class FullTime extends Employee{
         this.bonus = bonus;
     }
     
+    public void setBaseSalary(double baseSalary) {
+        if (baseSalary < 0) {
+            throw new IllegalArgumentException("Base salary cannot be negative.");
+        }
+        this.baseSalary = baseSalary;
+    }
+
+    public void setBonus(double bonus) {
+        if (bonus < 0) {
+            throw new IllegalArgumentException("Bonus cannot be negative.");
+        }
+        this.bonus = bonus;
+    }
+
     public double getBaseSalary() { return baseSalary; }
-    public void setBaseSalary(double baseSalary) { this.baseSalary = baseSalary; }
-
     public double getBonus() { return bonus; }
-    public void setBonus(double bonus) { this.bonus = bonus; }
-
+    
+    
     @Override
     public double calculateMonthly() {
         return this.baseSalary + this.bonus;

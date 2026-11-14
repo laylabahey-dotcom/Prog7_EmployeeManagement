@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package Employees;
 import java.util.*;
 
@@ -22,20 +19,46 @@ public abstract class Employee {
         
     }
     
+    public void setID(String ID) {
+        if (ID == null || ID.isEmpty()) {
+            throw new IllegalArgumentException("Employee ID cannot be null or empty.");
+        }
+        this.ID = ID;
+    }
+
+    public void setFullName(String fullName) {
+        if (fullName == null || fullName.isEmpty()) {
+            throw new IllegalArgumentException("Full name cannot be null or empty.");
+        }
+        this.fullName = fullName;
+    }
+
+    public void setDepartment(String department) {
+        if (department == null || department.isEmpty()) {
+            throw new IllegalArgumentException("Department cannot be null or empty.");
+        }
+        this.Department = department;
+    }
+
+    public void setAge(int age) {
+        if (age < 18 || age > 100) {
+            throw new IllegalArgumentException("Age must be between 18 and 100.");
+        }
+        this.age = age;
+    }
+
+    public void setPosition(String position) {
+        if (position == null || position.isEmpty()) {
+            throw new IllegalArgumentException("Position cannot be null or empty.");
+        }
+        this.Position = position;
+    }
+
     public String getID() { return ID; }
-    public void setID(String ID) { this.ID = ID; }
-
     public String getFullName() { return fullName; }
-    public void setFullName(String fullName) { this.fullName = fullName; }
-
     public String getDepartment() { return Department; }
-    public void setDepartment(String department) { this.Department = department; }
-
     public int getAge() { return age; }
-    public void setAge(int age) { this.age = age; }
-
     public String getPosition() { return Position; }
-    public void setPosition(String position) { this.Position = position; }
 
     public abstract double calculateMonthly();  
     
