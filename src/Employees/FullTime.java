@@ -4,20 +4,10 @@
  */
 package Employees;
 
-/**
- *
- * @author layla-bahey
- */
 public class FullTime extends Employee{
-    private String type = "Full-time Employee";
-    private String ID;
-    private String fullName;
-    private String Department;
-    private int age;
-    private String Position;
+    public String type = "Full-time Employee";
     private double baseSalary;
     private double bonus;
-    private double monthlyPay;
 
 
     public FullTime(String ID, String fullName, String Department, int age, String Position, double baseSalary, double bonus) {
@@ -26,10 +16,16 @@ public class FullTime extends Employee{
         this.baseSalary = baseSalary;
         this.bonus = bonus;
     }
+    
+    public double getBaseSalary() { return baseSalary; }
+    public void setBaseSalary(double baseSalary) { this.baseSalary = baseSalary; }
+
+    public double getBonus() { return bonus; }
+    public void setBonus(double bonus) { this.bonus = bonus; }
 
     @Override
-    public void calculateMonthly() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public double calculateMonthly() {
+        return this.baseSalary + this.bonus;
     }
-
+    
 }

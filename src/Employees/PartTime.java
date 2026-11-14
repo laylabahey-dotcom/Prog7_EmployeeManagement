@@ -9,23 +9,35 @@ package Employees;
  * @author layla-bahey
  */
 public class PartTime extends Employee{
-    private String type = "Part-time Employee";
-    private String ID;
-    private String fullName;
-    private String Department;
-    private int age;
-    private String Position;
+    public String type = "Part-time Employee";
     private int workhours;
     private double payPerHour;
-    private double monthlyPay;
 
     public PartTime(String ID, String fullName, String Department, int age, 
             String Position, int Workhours, double payPerHour,
-            int workhours, double payPerHour) {
+            int workhours) {
         super(ID, fullName, Department, age, Position);
         //salary 
         this.payPerHour = payPerHour;
         this.workhours = workhours;
         
     }
+    
+    public int getWorkHours() { return workhours; }
+    public void setWorkHours(int workHours) { this.workhours = workHours; }
+
+    public double getPayPerHour() { return payPerHour; }
+    public void setPayPerHour(double payPerHour) { this.payPerHour = payPerHour; }
+
+    
+    @Override
+    public double calculateMonthly() {
+        return this.payPerHour * this.workhours;
+    }
+
+    
+    
+    
+    
+    
 }

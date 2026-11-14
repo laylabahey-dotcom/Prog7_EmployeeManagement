@@ -11,10 +11,7 @@ public abstract class Employee {
     private String Department;
     private int age;
     private String Position;
-    private String type;
-    private double monthlyPay;
-
-    Employee[] staff = new ArrayList();
+    
 
     public Employee(String ID, String fullName, String Department, int age, String Position){
         this.ID = ID;
@@ -24,8 +21,22 @@ public abstract class Employee {
         this.Position = Position;
         
     }
-
-    public abstract void calculateMonthly();
     
+    public String getID() { return ID; }
+    public void setID(String ID) { this.ID = ID; }
+
+    public String getFullName() { return fullName; }
+    public void setFullName(String fullName) { this.fullName = fullName; }
+
+    public String getDepartment() { return Department; }
+    public void setDepartment(String department) { this.Department = department; }
+
+    public int getAge() { return age; }
+    public void setAge(int age) { this.age = age; }
+
+    public String getPosition() { return Position; }
+    public void setPosition(String position) { this.Position = position; }
+
+    public abstract double calculateMonthly();  
     
 }
