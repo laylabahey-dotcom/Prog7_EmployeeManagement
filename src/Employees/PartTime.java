@@ -1,22 +1,21 @@
-
 package Employees;
 
+public class PartTime extends Employee {
 
-public class PartTime extends Employee{
     public String type = "Part-time Employee";
     private int workhours;
     private double payPerHour;
 
-    public PartTime(String ID, String fullName, String Department, int age, 
-            String Position, int Workhours, double payPerHour,
+    public PartTime(String ID, String fullName, String Department, int age,
+            String Position, double payPerHour,
             int workhours) {
         super(ID, fullName, Department, age, Position);
         //salary 
         this.payPerHour = payPerHour;
         this.workhours = workhours;
-        
+
     }
-    
+
     public void setWorkHours(int workHours) {
         if (workHours < 0 || workHours > 744) { // Max hours in a 31-day month
             throw new IllegalArgumentException("Work hours must be between 0 and 744.");
@@ -31,13 +30,17 @@ public class PartTime extends Employee{
         this.payPerHour = payPerHour;
     }
 
-    public int getWorkHours() { return workhours; }
-    public double getPayPerHour() { return payPerHour; }
-    
+    public int getWorkHours() {
+        return workhours;
+    }
+
+    public double getPayPerHour() {
+        return payPerHour;
+    }
+
     @Override
     public double calculateMonthly() {
         return this.payPerHour * this.workhours;
     }
-   
-    
+
 }
