@@ -79,17 +79,17 @@ public class DepartmentManager {
         }
 
         departments.clear(); 
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) { // Opens file for reading; auto-closes at end
-            String line; // Holds each line read from the file
-            while ((line = reader.readLine()) != null) { //reads line by line until end of file (null)
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) { 
+            String line; 
+            while ((line = reader.readLine()) != null) { 
                 if (line.isEmpty()) { //blank lines
                     continue; 
                 }
                 String[] parts = line.split(",", 2); 
                 if (parts.length == 2) { 
-                    int id = Integer.parseInt(parts[0]); // Converts the first text piece into an int ID
-                    String name = parts[1]; // Takes the second piece as the department name
-                    departments.add(new Dep(id, name)); // Reconstructs Department and adds to list
+                    int id = Integer.parseInt(parts[0]); 
+                    String name = parts[1]; 
+                    departments.add(new Dep(id, name)); 
                 }
             }
         } catch (IOException | NumberFormatException e) { 
