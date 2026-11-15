@@ -44,7 +44,7 @@ public class EmployeeHandler extends FileHandler<Employee> {
                     continue;
                 }
                 String type = parts[0];
-                String id = parts[1];
+                int id = Integer.parseInt(parts[1]);
                 String name = parts[2];
                 int age = Integer.parseInt(parts[3]);
                 String department = parts[4];

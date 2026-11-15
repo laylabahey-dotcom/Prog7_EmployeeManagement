@@ -5,13 +5,13 @@ import java.util.*;
 import javax.swing.*;
 import Departments.*;
 
-public class DepartmentHandler extends FileHandler<Departments> {
+public class DepartmentHandler extends FileHandler<Dep> {
 
     @Override
-    public void save(String fileName, ArrayList<Departments> items) {
+    public void save(String fileName, ArrayList<Dep> items) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(fileName))) {
-            for (Departments dep : department) {
-                pw.println(String.valueOf(dep.getID()) + "," + dep.getName());
+            for (Dep dep : items) {
+                pw.println(String.valueOf(dep.getDepartmentId()) + "," + dep.getDepartmentName());
             }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Error saving file: " + e.getMessage(),"File Error", JOptionPane.ERROR_MESSAGE);
@@ -19,8 +19,8 @@ public class DepartmentHandler extends FileHandler<Departments> {
     }
 
     @Override
-    public ArrayList<Departments> load(String fileName) {
-        ArrayList<Departments> dep = new ArrayList<>();
+    public ArrayList<Dep> load(String fileName) {
+        ArrayList<Dep> dep = new ArrayList<>();
         if (!fileExists(fileName)) {
             return dep;
         }
@@ -31,7 +31,7 @@ public class DepartmentHandler extends FileHandler<Departments> {
                 if (parts.length >= 2) {
                     int id = Integer.parseInt(parts[0]);
                     String name = parts[1];
-                    dep.add(new Departments(id, name));
+                    dep.add(new Dep(id, name));
                 }
             }
         } catch (IOException | NumberFormatException e) {
