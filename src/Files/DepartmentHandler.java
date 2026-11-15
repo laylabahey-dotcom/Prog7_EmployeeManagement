@@ -11,7 +11,7 @@ public class DepartmentHandler extends FileHandler<Departments> {
     public void save(String fileName, ArrayList<Departments> items) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(fileName))) {
             for (Departments dep : department) {
-                pw.println(dep.getID() + "," + dep.getName());
+                pw.println(String.valueOf(dep.getID()) + "," + dep.getName());
             }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Error saving file: " + e.getMessage(),"File Error", JOptionPane.ERROR_MESSAGE);

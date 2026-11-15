@@ -13,15 +13,16 @@ public class EmployeeHandler extends FileHandler<Employee> {
             for (Employee emp : employees) {
                 if (emp instanceof FullTime) {
                     FullTime ft = (FullTime) emp;
-                    pw.println(String.join(",", "Full_Time", ft.getID(),
+                    pw.println(String.join(",", "Full_Time", String.valueOf(ft.getID()),
                             ft.getFullName(), String.valueOf(ft.getAge()), ft.getDepartment(),
                             ft.getPosition(), String.valueOf(ft.getBaseSalary()),
                             String.valueOf(ft.getBonus())));
                 } else if (emp instanceof PartTime) {
                     PartTime pt = (PartTime) emp;
-                    pw.println(String.join(",", "Part_Time", pt.getID(),
+                    pw.println(String.join(",", "Part_Time", String.valueOf(pt.getID()),
                             pt.getFullName(), String.valueOf(pt.getAge()), pt.getDepartment(),
-                            pt.getPosition(), String.valueOf(pt.getPayPerHour()), String.valueOf(pt.getWorkHours())));
+                            pt.getPosition(), String.valueOf(pt.getPayPerHour()), 
+                            String.valueOf(pt.getWorkHours())));
                 }
             }
         } catch (IOException e) {

@@ -3,14 +3,14 @@ package Employees;
 import java.util.*;
 
 public abstract class Employee {
-    private String ID;
+    private int ID;
     private String fullName;
     private String Department;
     private int age;
     private String Position;
     
 
-    public Employee(String ID, String fullName, String Department, int age, String Position){
+    public Employee(int ID, String fullName, String Department, int age, String Position){
         this.ID = ID;
         this.fullName = fullName;
         this.Department = Department;
@@ -19,9 +19,9 @@ public abstract class Employee {
         
     }
     
-    public void setID(String ID) {
-        if (ID == null || ID.isEmpty()) {
-            throw new IllegalArgumentException("Employee ID cannot be null or empty.");
+    public void setID(int ID) {
+        if (ID == 0) {
+            throw new IllegalArgumentException("Employee ID cannot be 0.");
         }
         this.ID = ID;
     }
@@ -54,7 +54,7 @@ public abstract class Employee {
         this.Position = position;
     }
 
-    public String getID() { return ID; }
+    public int getID() { return ID; }
     public String getFullName() { return fullName; }
     public String getDepartment() { return Department; }
     public int getAge() { return age; }
