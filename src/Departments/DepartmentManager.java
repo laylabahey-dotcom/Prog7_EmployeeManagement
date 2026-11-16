@@ -1,17 +1,19 @@
 
 package Departments;
-import java.io.*;
+
+import Files.DepartmentHandler;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
 
 public class DepartmentManager {
-    private final List<Dep> departments = new ArrayList<>(); // in-memory list holding all departments
+    private final ArrayList<Dep> departments;
     private final String filePath;
+    private final DepartmentHandler fHandler = new DepartmentHandler();
     
     public DepartmentManager(String filePath){//called when starting the manager
         this.filePath = filePath;
-        loadFromFile();
+        this.departments = fHandler.load(filePath);
         if(departments.isEmpty()){//if no deps were loaded
             createDefaultDepartments();
             
@@ -23,9 +25,12 @@ public class DepartmentManager {
         departments.add(new Dep(3, "Finance"));
         departments.add(new Dep(4, "Marketing"));
         departments.add(new Dep(5, "Sales"));
-        saveToFile();
+        fHandler.save(filePath, departments);
     }
     public void addDepartment(int id, String name){
+        if(id <= 0){
+            throw new IllegalArgumentException("Department id must be a positive integer.");
+        }
         if(name == null || name.isEmpty()){
             throw new IllegalArgumentException("Department name cannot be empty.");
             
@@ -41,8 +46,17 @@ public class DepartmentManager {
             
         }
         departments.add(new Dep(id,name));
-        saveToFile();//saves the updated list to the file
+        fHandler.save(filePath, departments);
     }
+    
+    public Dep searchById(int id) {
+    for (Dep dept : departments) {
+        if (dept.getDepartmentId() == id) {
+            return dept;
+        }
+    }
+    return null;
+}
     
     public List<Dep> getAllDepartments(){
         return Collections.unmodifiableList(departments);
@@ -56,53 +70,8 @@ public class DepartmentManager {
         }
         return names;
     }
-    public void saveToFile() { 
-        File file = new File(filePath); // file obj pointing to file path
-        File parent = file.getParentFile();//if exists
-        if (parent != null && !parent.exists()) { 
-            parent.mkdirs(); // creates missing parent directories automatically
-        }
-
-        try (PrintWriter p = new PrintWriter(new BufferedWriter(new FileWriter(file)))) { //Opens file for writing;auto-closes at end
-            for (Dep dept : departments) { 
-                p.println(dept.getDepartmentId() + "," + dept.getDepartmentName()); //writes "id,name" on its own line
-            }
-        } catch (IOException e) { // Catches disk/file writing errors
-            System.err.println("Error saving departments: " + e.getMessage()); // Logs error without crashing app
-        }
+    
     }
-
-    public void loadFromFile() { 
-        File file = new File(filePath); 
-        if (!file.exists()) { 
-            return; 
-        }
-
-        departments.clear(); 
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) { 
-            String line; 
-            while ((line = reader.readLine()) != null) { 
-                if (line.isEmpty()) { //blank lines
-                    continue; 
-                }
-                String[] parts = line.split(",", 2); 
-                if (parts.length == 2) { 
-                    int id = Integer.parseInt(parts[0]); 
-                    String name = parts[1]; 
-                    departments.add(new Dep(id, name)); 
-                }
-            }
-        } catch (IOException | NumberFormatException e) { 
-            System.err.println("Error loading departments: " + e.getMessage());
-        }
-    }
-    public Dep searchById(int id) {
-    for (Dep dept : departments) {
-        if (dept.getDepartmentId() == id) {
-            return dept;
-        }
-    }
-    return null;
-}
+    
    
-}
+
