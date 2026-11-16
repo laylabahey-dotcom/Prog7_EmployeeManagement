@@ -1,0 +1,47 @@
+@startuml
+
+left to right direction
+skinparam classAttributeIconSize 0
+
+package "Files" {
+    abstract class FileHandler<T> {
+        # fileExists(fileName: String): boolean
+        + {abstract} save(fileName: String,items: ArrayList<T>): void
+        + {abstract} load(fileName: String): ArrayList<T>
+    }
+    class EmployeeHandler extends FileHandler<Emoloyee> {
+        + save(fileName: String,employees: ArrayList<Employee>): void
+        + load(fileName: String): ArrayList<Employee>
+    }
+    class DepartmentHandler extends FileHandler<Dep> {
+        + save(fileName: String,items: ArrayList<Dep>): void
+        + load(fileName: String): ArrayList<Dep>
+    }
+}
+
+package "gui" {
+    class LoginScreen extends JFrame {
+        - JTextField username
+        - JPasswordField password
+        - JButton login
+        - JButton cancel
+
+        - java_this(): JFrame
+        - openMainDashbord(): void
+    }
+    class Dashboard extends JFrame {
+        ' only has its constructor
+    }
+}
+
+
+
+'relations
+'1.Inheritance -> used extends
+'2.Aggregation "" o-- ""
+
+'3.Composition "" *-- ""
+
+'4.Association "" --> ""
+
+@enduml

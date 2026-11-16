@@ -2,8 +2,12 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
+import Departments.*;
 
 public class Dashboard extends JFrame {
+    
+    private DepartmentManager deptManager = new DepartmentManager("departments.csv");
+    //other parameters that might be used 3shan ba2eet el buttons (later lama y5alaso el gui bet3hom)
 
     public Dashboard() {
         //frame
@@ -54,24 +58,19 @@ public class Dashboard extends JFrame {
         });
 
         addEmp.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "Openning Add Employee Panel", "Navigation", JOptionPane.INFORMATION_MESSAGE);
-            //add employee method connection
+            //new AddEmployeeWindow(parameters).setVisible(true);
         });
         viewEmp.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "Openning View/Search Table", "Navigation", JOptionPane.INFORMATION_MESSAGE);
-            //view/search employee method connection
+            //new ViewEmployeeWindow(parameters).setVisible(true);
         });
         updateEmp.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "Openning Update Employee Panel", "Navigation", JOptionPane.INFORMATION_MESSAGE);
-            //view/search employee method connection
+            //new UpdateEmployeeWindow(parameters).setVisible(true);
         });
         deleteEmp.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "Openning Delete Employee Feature", "Navigation", JOptionPane.INFORMATION_MESSAGE);
-            //view/search employee method connection
+            //new DeleteEmployeeWindow(parameters).setVisible(true);
         });
         dept.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "Openning Department Management Panel", "Navigation", JOptionPane.INFORMATION_MESSAGE);
-            //department management method connection
+            //new DepartmentWindow(deptManager).setVisible(true);
         });
 
         exit.addActionListener(e -> System.exit(0));
