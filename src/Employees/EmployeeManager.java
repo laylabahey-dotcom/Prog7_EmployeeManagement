@@ -1,4 +1,3 @@
-
 package Employees;
 
 import Departments.Dep;
@@ -16,6 +15,76 @@ public class EmployeeManager implements EmployeeOperations{
         this.employees = fHandler.load(filePath);
     }
     
+    public ArrayList<Employee> getAllEmployees() {
+        return employees;
+    }
+    
+    public Employee searchById(int id) {
+        for(Employee emp:employees) {
+            if(emp.getID()==id)
+                return emp;
+        } return null;
+    }
+    
+    private void saveChanges() {
+        fHandler.save(filePath,employees);
+    }
+    
+    public void addEmployee(Employee newEmp) {
+        if(newEmp==null) 
+            throw new IllegalArgumentException("Employee cannot be null.");
+        for(Employee emp:employees) {
+            if(emp.getID()==newEmp.getID())
+                throw new IllegalArgumentException("Employee ID "+newEmp.getID()+" already exists.");
+        }
+        employees.add(newEmp);
+        saveChanges();
+    }
+    
+    public void updateEmployee(int originalId, Employee updatedEmp) {
+        Employee existing=searchById(originalId);
+        if(existing==null) 
+            throw new IllegalArgumentException("Employee with ID "+originalId+" not found.");
+        if(originalId!=updatedEmp.getID()) {
+            if(searchById(updatedEmp.getID())!=null)
+                throw new IllegalArgumentException("Cannot update. Employee ID "+updatedEmp.getID()+" already exists.");
+        }
+        existing.setID(updatedEmp.getID());
+        existing.setFullName(updatedEmp.getFullName());
+        existing.setAge(updatedEmp.getAge());
+        existing.setDepartment(updatedEmp.getDepartment());
+        existing.setPosition(updatedEmp.getPosition());
+        //updating type-specific variables
+        if (existing instanceof FullTime && updatedEmp instanceof FullTime) {
+            ((FullTime) existing).setBaseSalary(((FullTime) updatedEmp).getBaseSalary());
+            ((FullTime) existing).setBonus(((FullTime) updatedEmp).getBonus());
+        } else if (existing instanceof PartTime && updatedEmp instanceof PartTime) {
+            ((PartTime) existing).setPayPerHour(((PartTime) updatedEmp).getPayPerHour());
+            ((PartTime) existing).setWorkHours(((PartTime) updatedEmp).getWorkHours());
+        }
+        saveChanges();
+    }
+    
+    public List<Employee> searchByName(String nameQuery) {
+        List<Employee> results =new ArrayList<>();
+        if(nameQuery==null||nameQuery.trim().isEmpty())
+            return results;
+        String query=nameQuery.toLowerCase().trim();
+        for(Employee emp:employees) {
+            if(emp.getFullName().toLowerCase().contains(query))
+                results.add(emp);
+        } return results;
+    }
+    
+    public boolean deleteEmployee(int id) {
+        Employee emp=searchById(id);
+        if(emp!=null){
+            employees.remove(emp);
+            saveChanges();
+            return true;
+        } return false;
+    }
+    
     @Override
     public List<Employee> filterByDepartment(Dep department) {
         List<Employee> match = new ArrayList<>();
@@ -23,13 +92,10 @@ public class EmployeeManager implements EmployeeOperations{
             match.addAll(employees);
             return match;
         }
-        int targetId = department.getDepartmentId();
-        
-        for (Employee emp : employees) {
-            Dep empDep = emp.getDepartment();
-            if (empDep != null && empDep.getDepartmentId() == targetId) {
+        String targetName=department.getDepartmentName();
+        for(Employee emp:employees){
+            if(emp.getDepartment()!=null && emp.getDepartment().equalsIgnoreCase(targetName))
                 match.add(emp);
-            }
         }
         return match;
     }
