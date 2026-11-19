@@ -99,9 +99,9 @@ public class Dashboard extends JFrame {
     }
 
     //Main fn to try out bas i'll delete it isa
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new Dashboard().setVisible(true);
-        });
-    }
+//    public static void main(String[] args) {
+//        SwingUtilities.invokeLater(() -> {
+//            new Dashboard().setVisible(true);
+//        });
+//    }
 }
