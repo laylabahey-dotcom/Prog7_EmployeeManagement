@@ -19,7 +19,7 @@ public class Dashboard extends JFrame {
         //panels
         JPanel top = new JPanel(new BorderLayout());
         top.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-        top.setBackground(Color.BLUE);
+        top.setBackground(Color.decode("#AEC6CF"));
         JLabel welcome = new JLabel("Welcome to the Employee Management System!!");
         welcome.setForeground(Color.WHITE);
         welcome.setFont(new Font("Times New Roman", Font.BOLD, 16));
