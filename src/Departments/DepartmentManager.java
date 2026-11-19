@@ -1,4 +1,3 @@
-
 package Departments;
 
 import Files.DepartmentHandler;
@@ -7,19 +6,21 @@ import java.util.List;
 import java.util.Collections;
 
 public class DepartmentManager {
+
     private final ArrayList<Dep> departments;
     private final String filePath;
     private final DepartmentHandler fHandler = new DepartmentHandler();
-    
-    public DepartmentManager(String filePath){//called when starting the manager
+
+    public DepartmentManager(String filePath) {//called when starting the manager
         this.filePath = filePath;
         this.departments = fHandler.load(filePath);
-        if(departments.isEmpty()){//if no deps were loaded
+        if (departments.isEmpty()) {//if no deps were loaded
             createDefaultDepartments();
-            
+
         }
     }
-    private void createDefaultDepartments(){
+
+    private void createDefaultDepartments() {
         departments.add(new Dep(1, "IT"));
         departments.add(new Dep(2, "Human Resources"));
         departments.add(new Dep(3, "Finance"));
@@ -27,51 +28,50 @@ public class DepartmentManager {
         departments.add(new Dep(5, "Sales"));
         fHandler.save(filePath, departments);
     }
-    public void addDepartment(int id, String name){
-        if(id <= 0){
+
+    public void addDepartment(int id, String name) {
+        if (id <= 0) {
             throw new IllegalArgumentException("Department id must be a positive integer.");
         }
-        if(name == null || name.isEmpty()){
+        if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Department name cannot be empty.");
-            
+
         }
-        for(Dep dept : departments){//loops through every existing department in memory
-            if(dept.getDepartmentId() == id){
+        for (Dep dept : departments) {//loops through every existing department in memory
+            if (dept.getDepartmentId() == id) {
                 throw new IllegalArgumentException("Duplicate department id: " + id);
-             
+
             }
-            if(dept.getDepartmentName().equalsIgnoreCase(name)){ 
-                throw new IllegalArgumentException("Duplicate department name:" + name);    
+            if (dept.getDepartmentName().equalsIgnoreCase(name)) {
+                throw new IllegalArgumentException("Duplicate department name:" + name);
             }
-            
+
         }
-        departments.add(new Dep(id,name));
+        departments.add(new Dep(id, name));
         fHandler.save(filePath, departments);
     }
-    
+
     public Dep searchById(int id) {
-    for (Dep dept : departments) {
-        if (dept.getDepartmentId() == id) {
-            return dept;
+        for (Dep dept : departments) {
+            if (dept.getDepartmentId() == id) {
+                return dept;
+            }
         }
+        return null;
     }
-    return null;
-}
-    
-    public List<Dep> getAllDepartments(){
+
+    public List<Dep> getAllDepartments() {
         return Collections.unmodifiableList(departments);
-        
+
     }
-    public List<String> getDepartmentNames(){
+
+    public List<String> getDepartmentNames() {
         List<String> names = new ArrayList<>();
-        for(Dep dept : departments){
+        for (Dep dept : departments) {
             names.add(dept.getDepartmentName());
-            
+
         }
         return names;
     }
-    
-    }
-    
-   
 
+}

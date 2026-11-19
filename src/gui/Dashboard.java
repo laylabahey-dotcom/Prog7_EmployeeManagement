@@ -5,7 +5,7 @@ import java.awt.*;
 import Departments.*;
 
 public class Dashboard extends JFrame {
-    
+
     private DepartmentManager deptManager = new DepartmentManager("departments.csv");
     //other parameters that might be used 3shan ba2eet el buttons (later lama y5alaso el gui bet3hom)
 
