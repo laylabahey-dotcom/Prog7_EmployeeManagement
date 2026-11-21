@@ -223,7 +223,6 @@ public class AddEmployeeWindow extends JFrame {
  
     // Returns the trimmed text of a field, or throws an error if the field is empty. */
     private String required(JTextField field, String label) {
-    private String required(JTextField field, String label) {
         String text = field.getText().trim();
         if (text.isEmpty()) {
             field.requestFocus();
