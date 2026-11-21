@@ -112,8 +112,12 @@ public class AddEmployeeWindow extends JFrame {
         getRootPane().setDefaultButton(add); // pressing Enter anywhere in the form triggers "Add"
     }
     
-    private java.util.List<Dep> getDepartmentNames(DepartmentManager depManager) {
-        return depManager.getAllDepartments();
+    private String[] getDepartmentNames(DepartmentManager depManager) {
+        java.util.List<String> names = new java.util.ArrayList<>();
+        for (Dep d : depManager.getAllDepartments()) {
+            names.add(d.getDepartmentName());   // Dep -> its name (String)
+        }
+        return names.toArray(new String[0]);    // List<String> -> String[]
     }
     
     
