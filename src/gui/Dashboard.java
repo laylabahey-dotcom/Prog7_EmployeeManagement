@@ -3,10 +3,12 @@ package gui;
 import javax.swing.*;
 import java.awt.*;
 import Departments.*;
+import Employees.*;
 
 public class Dashboard extends JFrame {
 
     private DepartmentManager deptManager = new DepartmentManager("departments.csv");
+    private EmployeeManager empManager = new EmployeeManager("employees.csv");
     //other parameters that might be used 3shan ba2eet el buttons (later lama y5alaso el gui bet3hom)
 
     public Dashboard() {
@@ -80,8 +82,9 @@ public class Dashboard extends JFrame {
         });
 
         addEmp.addActionListener(e -> {
-            //new AddEmployeeWindow(parameters).setVisible(true);
+            new AddEmployeeWindow(empManager, deptManager).setVisible(true);
         });
+        
         viewEmp.addActionListener(e -> {
             //new ViewEmployeeWindow(parameters).setVisible(true);
         });
