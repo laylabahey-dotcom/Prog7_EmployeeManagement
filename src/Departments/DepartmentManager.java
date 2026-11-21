@@ -4,6 +4,7 @@ import Files.DepartmentHandler;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
+import java.util.Comparator;
 
 public class DepartmentManager {
 
@@ -48,9 +49,23 @@ public class DepartmentManager {
 
         }
         departments.add(new Dep(id, name));
+        sortDepartmentsId();
         fHandler.save(filePath, departments);
     }
-
+    private void sortDepartmentsId() {
+    departments.sort(Comparator.comparingInt(Dep::getDepartmentId));
+}
+    public void deleteDepById(int id){
+        for(Dep dept: departments){
+            if(dept.getDepartmentId() == id){
+                departments.remove(dept);
+                fHandler.save(filePath, departments);
+                return;
+                            }
+        }
+        
+        
+    }
     public Dep searchById(int id) {
         for (Dep dept : departments) {
             if (dept.getDepartmentId() == id) {
@@ -58,6 +73,18 @@ public class DepartmentManager {
             }
         }
         return null;
+    }
+    public Dep searchbyName(String name){
+        if(name == null || name.isEmpty()){
+            return null;
+        }
+        String target = name.toLowerCase();
+        for(Dep dept: departments){//last is the listName i loop in
+            if(dept.getDepartmentName().toLowerCase().equals(target)){
+                return dept;
+            }
+        }
+        return null;//if name not found
     }
 
     public List<Dep> getAllDepartments() {

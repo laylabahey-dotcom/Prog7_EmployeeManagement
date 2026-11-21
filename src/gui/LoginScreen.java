@@ -82,9 +82,11 @@ public class LoginScreen extends JFrame {
     }
 
 //    wht to write to run in main
-//    public static void main(String[] args) {
-//        SwingUtilities.invokeLater(() -> {
-//            new LoginScreen().setVisible(true);
-//        });
-//    }
+   /*
+   public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new LoginScreen().setVisible(true);
+        });
+    }
+*/
 }
