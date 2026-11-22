@@ -11,6 +11,10 @@ public class LoginScreen extends JFrame {
     private JButton login;
     private JButton cancel;
 
+    private static final Color DARK = Color.decode("#344E41");
+    private static final Color LIGHT = Color.decode("#DAD7CD");
+    private static final Font LABEL_FONT = new Font("Times New Roman", Font.BOLD, 14);
+
     public LoginScreen() {
         //frame
         setTitle("Employee Management System - Login");
@@ -21,6 +25,7 @@ public class LoginScreen extends JFrame {
 
         //main panels
         JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBackground(LIGHT);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(8, 8, 8, 8);
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -31,6 +36,8 @@ public class LoginScreen extends JFrame {
         panel.add(new JLabel("Username:"), gbc);
         gbc.gridx = 1;
         username = new JTextField(15);
+        username.setForeground(DARK);
+        username.setFont(LABEL_FONT);
         panel.add(username, gbc);
 
         //password
@@ -39,12 +46,23 @@ public class LoginScreen extends JFrame {
         panel.add(new JLabel("Password:"), gbc);
         gbc.gridx = 1;
         password = new JPasswordField(15);
+        password.setFont(LABEL_FONT);
+        password.setForeground(DARK);
         panel.add(password, gbc);
 
         //buttons
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        buttons.setBackground(LIGHT);
         login = new JButton("Login");
         cancel = new JButton("Cancel");
+        login.setBackground(LIGHT);
+        login.setForeground(DARK);
+        login.setBorder(BorderFactory.createLineBorder(DARK, 2));
+        login.setFont(LABEL_FONT);
+        cancel.setBackground(LIGHT);
+        cancel.setForeground(DARK);
+        cancel.setBorder(BorderFactory.createLineBorder(DARK, 2));
+        cancel.setFont(LABEL_FONT);
         buttons.add(login);
         buttons.add(cancel);
         gbc.gridx = 0;
@@ -81,12 +99,4 @@ public class LoginScreen extends JFrame {
         this.dispose();
     }
 
-//    wht to write to run in main
-   /*
-   public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new LoginScreen().setVisible(true);
-        });
-    }
-*/
 }

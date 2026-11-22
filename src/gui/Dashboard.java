@@ -84,7 +84,7 @@ public class Dashboard extends JFrame {
         addEmp.addActionListener(e -> {
             new AddEmployeeWindow(empManager, deptManager).setVisible(true);
         });
-        
+
         viewEmp.addActionListener(e -> {
             //new ViewEmployeeWindow(parameters).setVisible(true);
         });
@@ -95,16 +95,10 @@ public class Dashboard extends JFrame {
             //new DeleteEmployeeWindow(parameters).setVisible(true);
         });
         dept.addActionListener(e -> {
-            //new DepartmentWindow(deptManager).setVisible(true);
+            new DepartmentWindow(deptManager).setVisible(true);
         });
 
         exit.addActionListener(e -> System.exit(0));
     }
 
-    //Main fn to try out bas i'll delete it isa
-//    public static void main(String[] args) {
-//        SwingUtilities.invokeLater(() -> {
-//            new Dashboard().setVisible(true);
-//        });
-//    }
 }

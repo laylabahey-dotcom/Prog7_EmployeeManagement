@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package gui;
 
 import Employees.*;
@@ -11,12 +7,13 @@ import java.awt.*;
 import java.awt.event.ItemEvent;
 
 public class AddEmployeeWindow extends JFrame {
+
     private static final Color DARK = Color.decode("#344E41");
     private static final Color LIGHT = Color.decode("#DAD7CD");
     private static final Font LABEL_FONT = new Font("Times New Roman", Font.BOLD, 14);
-    
+
     private final EmployeeManager manager;
-    
+
     // basic employee fields
     //  Input components for the data every employee has
     private final JTextField idField = new JTextField(15);
@@ -25,28 +22,28 @@ public class AddEmployeeWindow extends JFrame {
     private final JComboBox<String> deptBox;
     private final JTextField positionField = new JTextField(15);
     private final JComboBox<String> typeBox = new JComboBox<>(new String[]{"Full-Time", "Part-Time"});
- 
+
     // salary fields 
     private final JTextField baseField = new JTextField(15);
     private final JTextField bonusField = new JTextField(15);
     private final JTextField payField = new JTextField(15);
     private final JTextField hoursField = new JTextField(15);
-    
+
     // CardLayout stacks several panels in the same spot and shows only one of them.
     // use it to switch between the Full-Time card and the Part-Time card.
     private final CardLayout salaryCards = new CardLayout();
     private final JPanel salaryPanel = new JPanel(salaryCards);
-    
+
     public AddEmployeeWindow(EmployeeManager empManager, DepartmentManager depManager) {
         this.manager = empManager;
         deptBox = new JComboBox<>(getDepartmentNames(depManager));
- 
+
         setTitle("Employee Management System - Add Employee");
         setSize(440, 460);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //X button closes ONLY this window (EXIT_ON_CLOSE would quit the app)
         setLocationRelativeTo(null);
         setResizable(false);
- 
+
         // header
         JPanel top = new JPanel(new BorderLayout());
         top.setBorder(BorderFactory.createEmptyBorder(12, 15, 12, 15));
@@ -55,7 +52,7 @@ public class AddEmployeeWindow extends JFrame {
         title.setForeground(LIGHT);
         title.setFont(new Font("Times New Roman", Font.BOLD, 20));
         top.add(title, BorderLayout.WEST);
- 
+
         // form
         // form panel (all the input rows)
         JPanel form = new JPanel(new GridBagLayout());
@@ -64,18 +61,18 @@ public class AddEmployeeWindow extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();   // components stretch to fill their cell's width
         gbc.insets = new Insets(6, 6, 6, 6);
         gbc.fill = GridBagConstraints.HORIZONTAL;
- 
-         // each call adds one row: label on the left (column 0), input on the right (column 1)
+
+        // each call adds one row: label on the left (column 0), input on the right (column 1)
         addRow(form, gbc, 0, "Employee ID:", idField);
         addRow(form, gbc, 1, "Full Name:", nameField);
         addRow(form, gbc, 2, "Age:", ageField);
         addRow(form, gbc, 3, "Department:", deptBox);
         addRow(form, gbc, 4, "Position:", positionField);
         addRow(form, gbc, 5, "Employee Type:", typeBox);
- 
+
         // salary panel: one card per employee type
         salaryPanel.setBackground(LIGHT);
-         // The second argument is the card's NAME. It must match the strings in typeBox
+        // The second argument is the card's NAME. It must match the strings in typeBox
         // ("Full-Time" / "Part-Time") because we show cards by those names below.
         salaryPanel.add(buildCard("Base Salary:", baseField, "Bonus:", bonusField), "Full-Time");
         salaryPanel.add(buildCard("Pay Per Hour:", payField, "Work Hours:", hoursField), "Part-Time");
@@ -83,14 +80,14 @@ public class AddEmployeeWindow extends JFrame {
         gbc.gridy = 6;
         gbc.gridwidth = 2;
         form.add(salaryPanel, gbc);
- 
+
         // switch the visible salary fields when the type changes
         typeBox.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 salaryCards.show(salaryPanel, (String) typeBox.getSelectedItem());
             }
         });
- 
+
         // buttons
         JButton add = styledButton("Add");
         JButton clear = styledButton("Clear");
@@ -111,7 +108,7 @@ public class AddEmployeeWindow extends JFrame {
         close.addActionListener(e -> dispose()); // closes just this window
         getRootPane().setDefaultButton(add); // pressing Enter anywhere in the form triggers "Add"
     }
-    
+
     private String[] getDepartmentNames(DepartmentManager depManager) {
         java.util.List<String> names = new java.util.ArrayList<>();
         for (Dep d : depManager.getAllDepartments()) {
@@ -119,13 +116,12 @@ public class AddEmployeeWindow extends JFrame {
         }
         return names.toArray(new String[0]);    // List<String> -> String[]
     }
-    
-    
-         /*
+
+    /*
       Builds one "card" of the salary section: two labelled rows.
       Used once for Full-Time (base + bonus) and once for Part-Time (pay + hours).
      */
-       private JPanel buildCard(String label1, JTextField f1, String label2, JTextField f2) {
+    private JPanel buildCard(String label1, JTextField f1, String label2, JTextField f2) {
         JPanel card = new JPanel(new GridBagLayout());
         card.setBackground(LIGHT);
         GridBagConstraints gbc = new GridBagConstraints();
@@ -137,8 +133,8 @@ public class AddEmployeeWindow extends JFrame {
         addRow(card, gbc, 1, label2, f2);
         return card;
     }
-       
-       /* Adds one row (a label + an input field) to a panel that uses GridBagLayout. */
+
+    /* Adds one row (a label + an input field) to a panel that uses GridBagLayout. */
     private void addRow(JPanel panel, GridBagConstraints gbc, int row, String text, JComponent field) {
         gbc.gridwidth = 1;
         gbc.gridx = 0;
@@ -151,8 +147,7 @@ public class AddEmployeeWindow extends JFrame {
         gbc.gridx = 1;
         panel.add(field, gbc);
     }
- 
-    
+
     private JButton styledButton(String text) {
         JButton b = new JButton(text);
         b.setFont(LABEL_FONT);
@@ -161,7 +156,7 @@ public class AddEmployeeWindow extends JFrame {
         b.setFocusPainted(false);
         return b;
     }
- 
+
     // MAIN LOGIC: runs when the user clicks "Add"
     // Steps: required fields -> numeric checks -> unique ID -> salary checks
     //        -> create object -> add to manager (which saves) -> success message
@@ -176,7 +171,7 @@ public class AddEmployeeWindow extends JFrame {
             if (dept == null || dept.isEmpty()) {
                 throw new IllegalArgumentException("Please select a department.");
             }
- 
+
             // numeric validation (same rules as the setters in Employee/FullTime/PartTime)
             int id = wholeNumber(idField, idText, "Employee ID");
             if (id <= 0) {
@@ -188,13 +183,13 @@ public class AddEmployeeWindow extends JFrame {
                 ageField.requestFocus();
                 throw new IllegalArgumentException("Age must be between 18 and 100.");
             }
- 
+
             // unique ID
             if (manager.searchById(id) != null) {
                 idField.requestFocus();
                 throw new IllegalArgumentException("Employee ID " + id + " already exists. Please use a different ID.");
             }
- 
+
             // salary info + create the appropriate object
             Employee employee;
             if ("Full-Time".equals(typeBox.getSelectedItem())) {
@@ -210,13 +205,13 @@ public class AddEmployeeWindow extends JFrame {
                 }
                 employee = new PartTime(id, name, dept, age, position, pay, hours);
             }
- 
+
             // add to the collection + save to file (done inside EmployeeManager)
             manager.addEmployee(employee);
             JOptionPane.showMessageDialog(this, "Employee added successfully!", "Success",
                     JOptionPane.INFORMATION_MESSAGE);
             clearForm();
- 
+
         } catch (IllegalArgumentException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Invalid Input", JOptionPane.ERROR_MESSAGE);
         } catch (RuntimeException ex) { // e.g. a file problem while saving
@@ -224,7 +219,7 @@ public class AddEmployeeWindow extends JFrame {
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
- 
+
     // Returns the trimmed text of a field, or throws an error if the field is empty. */
     private String required(JTextField field, String label) {
         String text = field.getText().trim();
@@ -234,7 +229,7 @@ public class AddEmployeeWindow extends JFrame {
         }
         return text;
     }
-    
+
     /* Converts text to an int, or throws an error with a friendly message. */
     private int wholeNumber(JTextField field, String text, String label) {
         try {
@@ -244,8 +239,8 @@ public class AddEmployeeWindow extends JFrame {
             throw new IllegalArgumentException(label + " must be a whole number.");
         }
     }
-    
-     /* Reads a field as a double that must not be negative (used for salary, bonus, pay per hour). */
+
+    /* Reads a field as a double that must not be negative (used for salary, bonus, pay per hour). */
     private double nonNegative(JTextField field, String label) {
         String text = required(field, label);
         double value;
@@ -261,11 +256,11 @@ public class AddEmployeeWindow extends JFrame {
         }
         return value;
     }
-    
-     /* Empties every field and resets both combo boxes to their first item. */
+
+    /* Empties every field and resets both combo boxes to their first item. */
     private void clearForm() {
         for (JTextField f : new JTextField[]{idField, nameField, ageField, positionField,
-                baseField, bonusField, payField, hoursField}) {
+            baseField, bonusField, payField, hoursField}) {
             f.setText("");
         }
         deptBox.setSelectedIndex(0);
@@ -273,6 +268,3 @@ public class AddEmployeeWindow extends JFrame {
         idField.requestFocus();
     }
 }
-    
-
-    
