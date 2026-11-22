@@ -7,6 +7,7 @@ import javax.swing.table.DefaultTableModel;
 import java.util.List;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.table.JTableHeader;
 
 public class DepartmentWindow extends JFrame {
 
@@ -35,28 +36,29 @@ public class DepartmentWindow extends JFrame {
         this.deptManager = deptManager;
         //frame
         this.setTitle("Manage Departments");
-        this.setSize(680, 540);
+        this.setSize(700, 560);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setResizable(false);
         this.setLocationRelativeTo(null);
-        this.setLayout(new BorderLayout(0, 6));
+        this.setLayout(new BorderLayout(0, 8));
         this.getContentPane().setBackground(base);
 
         //search in top panel
-        JPanel topPanel = new JPanel();
-        topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
+        JPanel topPanel = new JPanel();//1
+        topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));//adds components vertically
         topPanel.setBackground(base);
 
-        JPanel searchNameRow = createRowPanel();
+        JPanel searchNameRow = createRowPanel();//2
         searchFieldName = createTextField(20);
-        searchNameRow.add(new JLabel("Search by Name:"));
+        searchNameRow.add(createLabel("Search by Name:"));
         searchNameRow.add(searchFieldName);
 
-        JPanel searchIdRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 6));
-        searchFieldId = new JTextField(10);
-        searchIdRow.add(new JLabel("Search by ID:"));
+        JPanel searchIdRow = createRowPanel();//3
+        searchFieldId = createTextField(10);
+        searchIdRow.add(createLabel("Search by ID:"));
         searchIdRow.add(searchFieldId);
-
+        
+        //add both search name and id rows into topPanel
         topPanel.add(searchNameRow);
         topPanel.add(searchIdRow);
         add(topPanel, BorderLayout.NORTH);
@@ -72,27 +74,43 @@ public class DepartmentWindow extends JFrame {
 
         deptTable = new JTable(tableModel);
         deptTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        deptTable.setRowHeight(26);
+        deptTable.setFont(INPUT_FONT);
+        deptTable.setBackground(extra1); 
+        deptTable.setForeground(green); 
+        deptTable.setSelectionBackground(green); 
+        deptTable.setSelectionForeground(base); 
+        deptTable.setGridColor(extra2); 
+        JTableHeader header = deptTable.getTableHeader();
+        header.setBackground(green); 
+        header.setForeground(base); 
+        header.setFont(new Font("Times New Roman", Font.BOLD, 16));
+        header.setReorderingAllowed(false);
+        
         JScrollPane scrollPane = new JScrollPane(deptTable);
+        scrollPane.getViewport().setBackground(extra1); 
         add(scrollPane, BorderLayout.CENTER);//table @center
 
         //add & delete department  @ bottom panel
-        JPanel bottomPanel = new JPanel();
+        JPanel bottomPanel = new JPanel();//4
         bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.Y_AXIS));
+        bottomPanel.setBackground(base);
 
-        JPanel addRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 6));
-        idField = new JTextField(6);
-        nameField = new JTextField(16);
-        JButton addButton = new JButton("Add Department");
-        addRow.add(new JLabel("ID:"));
+        JPanel addRow = createRowPanel();//5 adds all components horizontally on same line
+        idField = createTextField(6);
+        nameField = createTextField(16);
+        JButton addButton = createButton("Add Department");
+        addRow.add(createLabel("ID:"));
         addRow.add(idField);
-        addRow.add(new JLabel("Name:"));
+        addRow.add(createLabel("Name:"));
         addRow.add(nameField);
         addRow.add(addButton);
 
-        JPanel deleteRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 6));
-        JButton deleteButton = new JButton("Delete Department");
+        JPanel deleteRow = createRowPanel();//6
+        JButton deleteButton = createButton("Delete Department");
         deleteRow.add(deleteButton);
-
+        
+        //add addrow and deleterow to bottompanel @south
         bottomPanel.add(addRow);
         bottomPanel.add(deleteRow);
         add(bottomPanel, BorderLayout.SOUTH);
@@ -107,7 +125,8 @@ public class DepartmentWindow extends JFrame {
     } //end of constructor
 
     private JPanel createRowPanel() {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 4));
+        JPanel panel = new JPanel();
+        panel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 4));
         panel.setBackground(base);
         return panel;
     }
@@ -120,7 +139,21 @@ public class DepartmentWindow extends JFrame {
         text.setFont(INPUT_FONT);
         return text;
     }
-
+    
+    private JLabel createLabel(String text){
+        JLabel label = new JLabel(text);
+        label.setForeground(green);
+        label.setFont(LABEL_FONT);
+        return label;
+    }
+    private JButton createButton(String text){
+        JButton button = new JButton(text);
+        button.setBackground(base); // NEW
+        button.setForeground(green); // NEW
+        button.setFont(BUTTON_FONT);
+        return button;
+    }
+    
     private void attachSearchListener(JTextField field) {
         field.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -196,7 +229,10 @@ public class DepartmentWindow extends JFrame {
             showError(idText.isEmpty() ? "Department ID cannot be empty." : "Department name cannot be empty.");
             return;
         }
-
+        if (nameText.matches("\\d+")) {
+        showError("Department name cannot be numbers only.");
+        return;
+        }
         try {
             int id = Integer.parseInt(idText);
             deptManager.addDepartment(id, nameText);
@@ -263,12 +299,12 @@ public class DepartmentWindow extends JFrame {
             tableModel.addRow(new Object[]{dept.getDepartmentId(), dept.getDepartmentName()});
         }
     }
-
-//    public static void main(String[] args) {
-//        SwingUtilities.invokeLater(() -> {
-//            DepartmentManager test = new DepartmentManager("departments.csv");
-//            new DepartmentWindow(test).setVisible(true);
-//        });
-//    }
-
+    /*
+    public static void main(String[] args) {
+       SwingUtilities.invokeLater(() -> {
+            DepartmentManager test = new DepartmentManager("departments.csv");
+           new DepartmentWindow(test).setVisible(true);
+       });
+    }
+*/
 }
