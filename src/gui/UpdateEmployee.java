@@ -1,9 +1,6 @@
 package gui;
 
-import Employees.Employee;
-import Employees.EmployeeManager;
-import Employees.FullTime;
-import Employees.PartTime;
+import Employees.*;
 import java.awt.*;
 import javax.swing.*;
 
