@@ -268,40 +268,42 @@ public class ViewEmployees extends JFrame {
         String nameQuery = searchNameField.getText().trim();
         String selectedDept = (String) deptFilterBox.getSelectedItem();//current selected item in list=selectedDept
         boolean hasDept = selectedDept!=null && !"All".equalsIgnoreCase(selectedDept);
-        //both empty -> show all employees ;no filter
-        if (idQuery.isEmpty() && nameQuery.isEmpty() && !hasDept) {
-            loadEmployeesToTable();
-            return;
+        
+        List<Employee> filtered = new ArrayList<>();
+        //start from selected dept or ALL if no dept is selected
+        for(Employee emp : employeeManager.getAllEmployees()){
+            if(emp == null){//no emp
+                continue;
+            }
+            if(hasDept && !selectedDept.equalsIgnoreCase(emp.getDepartment())){
+                continue;//skip emp if it's not of the selectedDept
+                
+            }
+            filtered.add(emp);//match ; add emp to filtered list to search from it
         }
+        
         if (!idQuery.isEmpty()) {
             List<Employee> idResult = new ArrayList<>();
-            for (Employee emp : employeeManager.getAllEmployees()) {
-                if (emp != null && String.valueOf(emp.getID()).startsWith(idQuery)) {
+            for (Employee emp : filtered) {
+                if (String.valueOf(emp.getID()).startsWith(idQuery)) {
                     idResult.add(emp);
                 }
             }
-            modifyTable(idResult);
-            return;
+            filtered = idResult;
         }
         //searchByName uses String.contains ; live update in searchByName
         if(!nameQuery.isEmpty()){
+        String lowerName = nameQuery.toLowerCase();
         List<Employee> nameResult = new ArrayList<>();
-        List<Employee> matchesByName = employeeManager.searchByName(nameQuery);
-        for (Employee emp : matchesByName) {
-            if (emp != null && emp.getFullName() != null) {
+        for (Employee emp : filtered) {
+            if (emp.getFullName() != null && emp.getFullName().toLowerCase().contains(lowerName)) {
                 nameResult.add(emp);
             }
         }
-        modifyTable(nameResult);
-        return;   
+        filtered = nameResult;   
         }
-        List<Employee> deptResult = new ArrayList<>();
-        for(Employee emp : employeeManager.getAllEmployees()){
-            if(emp != null && selectedDept.equalsIgnoreCase(emp.getDepartment())){//selected dept = emp dept
-                deptResult.add(emp);//add emp to the filtered list
-            }
-        }
-        modifyTable(deptResult);
+        
+        modifyTable(filtered);
     }
 
     private void modifyTable(List<Employee> list) {
