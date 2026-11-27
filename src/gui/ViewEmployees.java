@@ -21,6 +21,8 @@ public class ViewEmployees extends JFrame {
     private final JTable employeeTable;
     private final JButton refresh;
     private final JButton back;
+    private final JButton delete;
+    private final JButton update;
     
     public ViewEmployees(EmployeeManager employeeManager) {
         this.employeeManager=employeeManager;
@@ -68,13 +70,19 @@ public class ViewEmployees extends JFrame {
         buttonPanel.setBackground(LIGHT);
         refresh=createButton("Refresh");
         back=createButton("Back to Dashboard");
-        refresh.addActionListener(e->loadEmployeesToTable());
+        delete=createButton("Delete");
+        update=createButton("Update");
+        delete.addActionListener(e->openDeleteForSelected());
+        update.addActionListener(e->openUpdateForSelected());
+        refresh.addActionListener(e->loadEmployeesToTable()); //imp
         back.addActionListener(e->{
             new Dashboard().setVisible(true);
-            this.dispose();
+            this.dispose(); //imp
         });
         
         buttonPanel.add(refresh);
+        buttonPanel.add(delete);
+        buttonPanel.add(update);
         buttonPanel.add(back);
         mainPanel.add(buttonPanel,BorderLayout.SOUTH);
         add(mainPanel);
@@ -128,6 +136,63 @@ public class ViewEmployees extends JFrame {
         tableModel.addRow(row);
         }
     }   
+    
+    private void openDeleteForSelected(){
+        int selectedId=getSelectedEmployeeId();
+        if(selectedId==-1) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Please select an employee from the table.",
+                    "No selection",
+                    JOptionPane.WARNING_MESSAGE
+            ); return;
+        }
+        
+        try{
+            DeleteEmployee deleteFrame=new DeleteEmployee(employeeManager,selectedId);
+            deleteFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosed(java.awt.event.WindowEvent e) {
+                    loadEmployeesToTable();
+                }
+            });
+            deleteFrame.setVisible(true);
+        } catch(IllegalArgumentException ex) {
+            JOptionPane.showMessageDialog(this,
+                    ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            loadEmployeesToTable();
+        }
+    }
+    
+    private void openUpdateForSelected(){
+        int selectedId=getSelectedEmployeeId();
+        if(selectedId==-1) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Please select an employee from the table.",
+                    "No selection",
+                    JOptionPane.WARNING_MESSAGE
+            ); return;
+        }
+        try {
+            UpdateEmployee updateFrame=new UpdateEmployee(employeeManager,selectedId);
+            updateFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosed(java.awt.event.WindowEvent e) {
+                    loadEmployeesToTable();
+                }
+            });
+            updateFrame.setVisible(true);
+        } catch(IllegalArgumentException ex) {
+            JOptionPane.showMessageDialog(this,
+                    ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            loadEmployeesToTable();
+        }
+    }
     
     public int getSelectedEmployeeId() {
         int selectedRow=employeeTable.getSelectedRow();
