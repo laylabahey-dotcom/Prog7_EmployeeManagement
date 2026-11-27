@@ -189,6 +189,11 @@ public class AddEmployeeWindow extends JFrame {
                 idField.requestFocus();
                 throw new IllegalArgumentException("Employee ID " + id + " already exists. Please use a different ID.");
             }
+            
+            // position is string
+            if (!position.matches("[A-Za-z ]+")) {
+                throw new IllegalArgumentException("Position must contain letters only.");
+            }
 
             // salary info + create the appropriate object
             Employee employee;
