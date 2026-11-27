@@ -11,8 +11,8 @@ public class PartTime extends Employee {
             int workhours) {
         super(ID, fullName, Department, age, Position);
         //salary 
-        this.payPerHour = payPerHour;
-        this.workhours = workhours;
+        setPayPerHour(payPerHour);
+        setWorkHours(workhours);
 
     }
 

@@ -1,19 +1,12 @@
 package gui;
 
-import Employees.Employee;
-import Employees.EmployeeManager;
-import Employees.FullTime;
-import Employees.PartTime;
+import Employees.*;
 import java.awt.*;
+import java.util.*;
 import java.util.List;
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
-import java.util.ArrayList;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import java.util.Set;
-import java.util.TreeSet;
+import javax.swing.table.*;
+import javax.swing.event.*;
 
 
 public class ViewEmployees extends JFrame {
@@ -25,19 +18,22 @@ public class ViewEmployees extends JFrame {
 
     private final EmployeeManager employeeManager;
     private final DefaultTableModel tableModel;
+    private final JLabel status;
     private final JTable employeeTable;
     private final JButton refresh;
     private final JButton back;
-    private final JButton delete;
-    private final JButton update;
+    private JButton delete;
+    private JButton update;
     private final JTextField searchIdField;
     private final JTextField searchNameField;
     private final JComboBox<String> deptFilterBox;
 
-    public ViewEmployees(EmployeeManager employeeManager) {
+    public ViewEmployees(EmployeeManager employeeManager,String mode) {
         this.employeeManager = employeeManager;
-        setTitle("View Employees");
-        setSize(850, 480);
+        setTitle(mode.equals("UPDATE") ? "Update Employee - Select from Table"
+                : mode.equals("DELETE") ? "Delete Employee - Select from Table"
+                : "View Employees");
+        setSize(1020, 520);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
@@ -117,17 +113,36 @@ public class ViewEmployees extends JFrame {
         };
         employeeTable = new JTable(tableModel);
         employeeTable.setFont(TABLE_FONT);
-        employeeTable.setRowHeight(24);
+        employeeTable.setRowHeight(28);
         employeeTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         employeeTable.setSelectionForeground(LIGHT);
         employeeTable.setSelectionBackground(DARK);
         employeeTable.setForeground(DARK);
-        employeeTable.setBackground(Color.WHITE);
+        employeeTable.setBackground(LIGHT); //change back to white if u dont like how it looks now
+        employeeTable.setGridColor(DARK);
+        employeeTable.setShowGrid(true);
+        employeeTable.setIntercellSpacing(new Dimension(8,4));
 
         JTableHeader header = employeeTable.getTableHeader();
         header.setFont(LABEL_FONT);
         header.setBackground(DARK);
         header.setForeground(LIGHT);
+        header.setPreferredSize(new Dimension(header.getWidth(),32));
+        header.setReorderingAllowed(false);
+        
+        int[] columnWidths = {
+            55, // 0:ID
+            160, // 1: Name
+            50, // 2: Age
+            135, // 3: Dep
+            135, // 4: Position
+            95, // 5: Type
+            230, // 6: Salary Details
+            115 // 7: Monthly Salary
+        };
+        for(int i = 0;i < columnWidths.length;i++) {
+            employeeTable.getColumnModel().getColumn(i).setPreferredWidth(columnWidths[i]);
+        }
 
         JScrollPane scrollPane = new JScrollPane(employeeTable);
         scrollPane.getViewport().setBackground(LIGHT);
@@ -139,23 +154,34 @@ public class ViewEmployees extends JFrame {
         buttonPanel.setBackground(LIGHT);
         refresh = createButton("Refresh");
         back = createButton("Back to Dashboard");
-        delete = createButton("Delete");
-        update = createButton("Update");
-        delete.addActionListener(e -> openDeleteForSelected());
-        update.addActionListener(e -> openUpdateForSelected());
         refresh.addActionListener(e -> loadEmployeesToTable()); //imp
         back.addActionListener(e -> {
-            new Dashboard().setVisible(true);
             this.dispose(); //imp
         });
-
+        if("UPDATE".equals(mode)) {
+            update = createButton("Update Selected");
+            update.addActionListener(e -> openUpdateForSelected());
+            buttonPanel.add(update);
+        } else if("DELETE".equals(mode)) {
+            delete = createButton("Delete Selected");
+            delete.addActionListener(e -> openDeleteForSelected());
+            buttonPanel.add(delete);
+        }
+        
         buttonPanel.add(refresh);
-        buttonPanel.add(delete);
-        buttonPanel.add(update);
         buttonPanel.add(back);
-        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+        
+        status = new JLabel(" ");
+        status.setFont(LABEL_FONT);
+        status.setForeground(new Color(153,27,27));
+        JPanel southPanel = new JPanel(new BorderLayout());
+        southPanel.setBackground(LIGHT);
+        southPanel.add(status,BorderLayout.WEST);
+        southPanel.add(buttonPanel,BorderLayout.EAST);
+        
+        mainPanel.add(southPanel, BorderLayout.SOUTH);
         add(mainPanel);
-
+        
         loadEmployeesToTable();
         attachSearchListener(searchIdField);
         attachSearchListener(searchNameField);
@@ -277,9 +303,16 @@ public class ViewEmployees extends JFrame {
 
     private void modifyTable(List<Employee> list) {
         tableModel.setRowCount(0);
-        if (list == null) {
+        if (list == null || list.isEmpty()) {
+            boolean hasEmp = employeeManager != null && !employeeManager.getAllEmployees().isEmpty();
+            if(hasEmp) {
+                status.setText("No matching employee found.");
+            } else {
+                status.setText("No employees registered yet.");
+            }
             return;
         }
+        status.setText(" ");
         for (Employee emp : list) {
             String type;
             String detail;

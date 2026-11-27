@@ -86,13 +86,13 @@ public class Dashboard extends JFrame {
         });
 
         viewEmp.addActionListener(e -> {
-            new ViewEmployees(empManager).setVisible(true);
+            new ViewEmployees(empManager,"VIEW").setVisible(true);
         });
         updateEmp.addActionListener(e -> {
-            //new UpdateEmp(parameters).setVisible(true);
+            new ViewEmployees(empManager,"UPDATE").setVisible(true);
         });
         deleteEmp.addActionListener(e -> {
-            new DeleteEmployee(/*parameters*/).setVisible(true);
+            new ViewEmployees(empManager,"DELETE").setVisible(true);
         });
         dept.addActionListener(e -> {
             new DepartmentWindow(deptManager).setVisible(true);
