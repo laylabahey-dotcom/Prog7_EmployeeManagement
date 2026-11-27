@@ -21,6 +21,9 @@ public class Dep {
         if (departmentName == null || departmentName.isEmpty()) {
             throw new IllegalArgumentException("Department name cannot be empty.");
         }
+        if(departmentName.contains(",")) {
+            throw new IllegalArgumentException("Department name cannot contain commas.");
+        }
         this.departmentName = departmentName;
     }
     

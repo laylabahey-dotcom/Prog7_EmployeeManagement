@@ -11,16 +11,15 @@ public abstract class Employee {
     
 
     public Employee(int ID, String fullName, String Department, int age, String Position){
-        this.ID = ID;
-        this.fullName = fullName;
-        this.Department = Department;
-        this.age = age;
-        this.Position = Position;
-        
+        setID(ID);
+        setFullName(fullName);
+        setDepartment(Department);
+        setAge(age);
+        setPosition(Position);
     }
     
     public void setID(int ID) {
-        if (ID == 0) {
+        if (ID <= 0) {
             throw new IllegalArgumentException("Employee ID cannot be 0.");
         }
         this.ID = ID;
@@ -29,6 +28,9 @@ public abstract class Employee {
     public void setFullName(String fullName) {
         if (fullName == null || fullName.isEmpty()) {
             throw new IllegalArgumentException("Full name cannot be null or empty.");
+        }
+        if(fullName.contains(",")) {
+            throw new IllegalArgumentException("Full name cannot contain commas.");
         }
         this.fullName = fullName;
     }
