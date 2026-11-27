@@ -134,7 +134,7 @@ public class UpdateEmployee extends JFrame {
         JTextField field= new JTextField(initial,16);
         field.setFont(FIELD_FONT);
         field.setForeground(DARK);
-        field.setBackground(Color.WHITE);
+        field.setBackground(LIGHT);
         return field;
     }
     
