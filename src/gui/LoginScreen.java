@@ -13,7 +13,7 @@ public class LoginScreen extends JFrame {
 
     private static final Color DARK = Color.decode("#344E41");
     private static final Color LIGHT = Color.decode("#DAD7CD");
-    private static final Font LABEL_FONT = new Font("Times New Roman", Font.BOLD, 14);
+    private static final Font LABEL_FONT = new Font("Times New Roman", Font.BOLD, 20);
     private static final Font BIG = new Font("Times New Roman", Font.BOLD, 16);
 
     public LoginScreen() {
