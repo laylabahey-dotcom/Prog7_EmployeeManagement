@@ -83,7 +83,7 @@ public class EmployeeManager implements EmployeeOperations {
         }
         String query = nameQuery.toLowerCase().trim();
         for (Employee emp : employees) {
-            if (emp.getFullName().toLowerCase().contains(query)) {
+            if (emp.getFullName() != null && emp.getFullName().toLowerCase().contains(query)) {
                 results.add(emp);
             }
         }
