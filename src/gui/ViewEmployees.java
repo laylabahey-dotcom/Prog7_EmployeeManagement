@@ -1,5 +1,6 @@
 package gui;
 
+import Departments.*;
 import Employees.*;
 import java.awt.*;
 import java.util.*;
@@ -17,6 +18,7 @@ public class ViewEmployees extends JFrame {
     private static final Font TABLE_FONT = new Font("Times New Roman", Font.PLAIN, 13);
 
     private final EmployeeManager employeeManager;
+    private final DepartmentManager departmentManager;
     private final DefaultTableModel tableModel;
     private final JLabel status;
     private final JTable employeeTable;
@@ -28,8 +30,9 @@ public class ViewEmployees extends JFrame {
     private final JTextField searchNameField;
     private final JComboBox<String> deptFilterBox;
 
-    public ViewEmployees(EmployeeManager employeeManager,String mode) {
+    public ViewEmployees(EmployeeManager employeeManager,DepartmentManager departmentManager,String mode) {
         this.employeeManager = employeeManager;
+        this.departmentManager=departmentManager;
         setTitle(mode.equals("UPDATE") ? "Update Employee - Select from Table"
                 : mode.equals("DELETE") ? "Delete Employee - Select from Table"
                 : "View Employees");
@@ -384,7 +387,7 @@ public class ViewEmployees extends JFrame {
             return;
         }
         try {
-            UpdateEmployee updateFrame = new UpdateEmployee(employeeManager, selectedId);
+            UpdateEmployee updateFrame = new UpdateEmployee(employeeManager, departmentManager, selectedId);
             updateFrame.addWindowListener(new java.awt.event.WindowAdapter() {
                 @Override
                 public void windowClosed(java.awt.event.WindowEvent e) {
@@ -410,40 +413,3 @@ public class ViewEmployees extends JFrame {
 
     }
 }
-/*
-    public void loadEmployeesToTable(){
-        tableModel.setRowCount(0);
-        if(employeeManager==null) {
-            return;
-        }
-        List<Employee> list=employeeManager.getAllEmployees();
-        for(Employee emp:list) {
-            String type;
-            String detail;
-            if(emp instanceof FullTime) {
-                FullTime ft=(FullTime) emp;
-                type="Full Time";
-                detail="Base: "+ft.getBaseSalary()+", Bonus: "+ft.getBonus();
-            } else if (emp instanceof PartTime) {
-                PartTime pt=(PartTime) emp;
-                type="Part Time";
-                detail="Rate per hour: "+pt.getPayPerHour()+", Hours: "+pt.getWorkHours();
-            } else{
-                type="Employee";
-                detail="Unknown";
-            }
-            Object[] row={
-            emp.getID(),
-            emp.getFullName(),
-            emp.getAge(),
-            emp.getDepartment(),
-            emp.getPosition(),
-            type,
-            detail,
-            String.format("%.2f", emp.calculateMonthly())
-            };
-                    
-        tableModel.addRow(row);
-        }
-    }   
- */

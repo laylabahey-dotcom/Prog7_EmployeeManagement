@@ -1,6 +1,7 @@
 package gui;
 
 import Employees.*;
+import Departments.*;
 import java.awt.*;
 import javax.swing.*;
 
@@ -11,13 +12,14 @@ public class UpdateEmployee extends JFrame {
     private static final Font FIELD_FONT=new Font("Times New Roman", Font.PLAIN,13);
     
     private final EmployeeManager employeeManager;
+    private final DepartmentManager departmentManager;
     private final int originalId;
     private final Employee existingEmployee;
     
     private final JTextField idField;
     private final JTextField nameField;
     private final JTextField ageField;
-    private final JTextField departmentField;
+    private final JComboBox<String> departmentBox;
     private final JTextField positionField;
     
     private final JLabel fullTimeLabel;
@@ -31,8 +33,9 @@ public class UpdateEmployee extends JFrame {
     private final JButton save;
     private final JButton cancel;
     
-    public UpdateEmployee(EmployeeManager employeeManager,int employeeId) {
+    public UpdateEmployee(EmployeeManager employeeManager,DepartmentManager departmentManager,int employeeId) {
         this.employeeManager=employeeManager;
+        this.departmentManager=departmentManager;
         this.originalId=employeeId;
         this.existingEmployee=(employeeManager!=null)? employeeManager.searchById(employeeId):null;
         if(this.existingEmployee==null) 
@@ -62,19 +65,34 @@ public class UpdateEmployee extends JFrame {
         idField=createTextField(String.valueOf(existingEmployee.getID()));
         nameField=createTextField(existingEmployee.getFullName());
         ageField=createTextField(String.valueOf(existingEmployee.getAge()));
-        departmentField=createTextField(existingEmployee.getDepartment());
         positionField=createTextField(existingEmployee.getPosition());
         
         baseSalaryField=createTextField("0.0");
         bonusField=createTextField("0.0");
         payPerHourField=createTextField("0.0");
-        workHoursField=createTextField("0.0");
+        workHoursField=createTextField("0");
+        
+        departmentBox=new JComboBox<>();
+        departmentBox.setFont(FIELD_FONT);
+        departmentBox.setBackground(Color.WHITE);
+        departmentBox.setForeground(DARK);
+        if(departmentManager!=null) {
+            String currentDept=existingEmployee.getDepartment();
+            for(Dep d:departmentManager.getAllDepartments()){
+                String deptName=d.getDepartmentName();
+                departmentBox.addItem(deptName);
+                if(currentDept!=null&&currentDept.trim().equalsIgnoreCase(deptName)) {
+                    departmentBox.setSelectedItem(existingEmployee.getDepartment());
+                }      
+            }
+        }
+        
         
        int row=0;
        row=addFormRow(formPanel,gbc,row,"Employee ID:",idField);
        row=addFormRow(formPanel,gbc,row,"Full Name:",nameField);
        row=addFormRow(formPanel,gbc,row,"Age:",ageField);
-       row=addFormRow(formPanel,gbc,row,"Department:",departmentField);
+       row=addFormRow(formPanel,gbc,row,"Department:",departmentBox);
        row=addFormRow(formPanel,gbc,row,"Position:",positionField);
        
        if(existingEmployee instanceof FullTime) {
@@ -134,7 +152,7 @@ public class UpdateEmployee extends JFrame {
         JTextField field= new JTextField(initial,16);
         field.setFont(FIELD_FONT);
         field.setForeground(DARK);
-        field.setBackground(LIGHT);
+        field.setBackground(Color.WHITE);
         return field;
     }
     
@@ -169,8 +187,12 @@ public class UpdateEmployee extends JFrame {
             int newId=Integer.parseInt(idField.getText().trim());
             int age=Integer.parseInt(ageField.getText().trim());
             String fullName=nameField.getText().trim();
-            String department=departmentField.getText().trim();
+            Object selectedDept=departmentBox.getSelectedItem();
+            if(selectedDept==null||selectedDept.toString().trim().isEmpty()) {
+                throw new IllegalArgumentException("Please select a valid department.");
+            }
             String position=positionField.getText().trim();
+            String department=selectedDept.toString().trim();
             
             Employee updatedEmp;
             if(existingEmployee instanceof FullTime) {
