@@ -3,6 +3,7 @@ package gui;
 import javax.swing.*;
 import java.awt.*;
 import Departments.*;
+import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
 import javax.swing.event.DocumentEvent;
@@ -133,7 +134,7 @@ public class DepartmentWindow extends JFrame {
 
     private JTextField createTextField(int space) {
         JTextField text = new JTextField(space);
-        text.setBackground(extra1);
+        text.setBackground(Color.WHITE);
         text.setForeground(green);
         text.setCaretColor(green);
         text.setFont(INPUT_FONT);
@@ -174,53 +175,27 @@ public class DepartmentWindow extends JFrame {
     }
 
     public void applySearch() {
-        String nameQuery = searchFieldName.getText().trim();
+        String nameQuery = searchFieldName.getText().trim().toLowerCase();
         String idQuery = searchFieldId.getText().trim();
-
-        if (nameQuery.isEmpty() && idQuery.isEmpty()) {
-            refreshTable(deptManager.getAllDepartments());
-            return;
-        }
-
-        Dep foundByName = null;
-        if (!nameQuery.isEmpty()) {
-            foundByName = deptManager.searchbyName(nameQuery);
-            if (foundByName == null) {
-                tableModel.setRowCount(0);
-                return;
+        List<Dep> filtered = new ArrayList<>();
+        
+        for(Dep dept: deptManager.getAllDepartments()){
+            if(dept == null){
+                continue;
             }
-        }
-
-        if (!idQuery.isEmpty()) {
-            try {
-                int targetId = Integer.parseInt(idQuery);
-                Dep foundById = findById(targetId);
-
-                if (foundById == null || (foundByName != null && foundByName.getDepartmentId() != foundById.getDepartmentId())) {
-                    tableModel.setRowCount(0);
-                    return;
-                }
-
-                refreshTable(List.of(foundById));
-                return;
-            } catch (NumberFormatException ex) {
-                tableModel.setRowCount(0);
-                return;
+            if(!idQuery.isEmpty() && !String.valueOf(dept.getDepartmentId()).startsWith(idQuery)){
+                continue;
             }
+            if(!nameQuery.isEmpty() && (dept.getDepartmentName()==null || !dept.getDepartmentName().toLowerCase().contains(nameQuery))){
+                continue;
+            }
+            filtered.add(dept);
         }
-
-        refreshTable(List.of(foundByName));
+        
+         
+        refreshTable(filtered);
     }
-
-    private Dep findById(int id) {
-        for (Dep dept : deptManager.getAllDepartments()) {
-            if (dept.getDepartmentId() == id) {
-                return dept;
-            }
-        }
-        return null;
-    }
-
+    
     private void handleAddDepartment() {
         String idText = idField.getText().trim();
         String nameText = nameField.getText().trim();
@@ -299,12 +274,5 @@ public class DepartmentWindow extends JFrame {
             tableModel.addRow(new Object[]{dept.getDepartmentId(), dept.getDepartmentName()});
         }
     }
-    /*
-    public static void main(String[] args) {
-       SwingUtilities.invokeLater(() -> {
-            DepartmentManager test = new DepartmentManager("departments.csv");
-           new DepartmentWindow(test).setVisible(true);
-       });
-    }
-*/
+    
 }
